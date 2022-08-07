@@ -1,13 +1,16 @@
 import express, { Router } from "express"
 import axios from "axios"
-import dotenv from "dotenv"
 
-// Config dotenv
-dotenv.config()
+// Config env variables
+if(process.env.NODE_ENV !== "production") {
+    require("dotenv").config();
+}
 
 const CLIENT_ID = process.env.CLIENT_ID
 const CLIENT_SECRET = process.env.CLIENT_SECRET
 const ACCESS_TOKEN_REDIRECT_URI = "http://localhost:3001/redirect"
+const API_URL = "https://timetreeapis.com"
+const ACCESS_TOKEN = process.env.ACCESS_TOKEN
 
 const router = Router();
 
@@ -23,15 +26,33 @@ router.get("/redirect", (req: express.Request, res: express.Response) => {
         code: code,
         grant_type: "authorization_code",
     }).then(res => {
-        const {access_token, token_type, created_at} = res.data
+        const { access_token, token_type, created_at } = res.data
+        if(access_token && token_type && created_at) {
+            // Authorization successful
+            // 1. Save access token in config file
+            console.log(access_token)
+
+            // If the accesstoken exists inside .env file it means that it stored correctly, otherwise not ...
+        }
+
     }).catch(err => {
         console.log(err)
     })
 
 })
 
-router.get("/authorized", (req: express.Request, res: express.Response) => {
-    console.log(req.query)
+router.get("/user", (req: express.Request, res: express.Response) => {
+    // Request timetree api to retrieve user data
+    axios.get(API_URL + "/user", {
+        headers: {
+            Accept: "application/vnd.timetree.v1+json",
+            Authorization: `Bearer ${ACCESS_TOKEN}`
+        }
+    }).then(res => {
+        console.log(res.data)
+    }).catch(err => {
+        console.log(err)
+    })
 })
 
 export default router;
