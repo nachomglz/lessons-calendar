@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors"
+import router from "./routers/authRouter"
 
 // Enable .env variables
 dotenv.config();
@@ -15,6 +16,8 @@ const app = express();
 app.use(express.json())
    .use(express.urlencoded({ extended: false }))
    .use(cors())
+
+app.use(router);
 
 
 // App listening on .env port
