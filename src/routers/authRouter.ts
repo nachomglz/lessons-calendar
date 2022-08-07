@@ -41,6 +41,20 @@ router.get("/redirect", (req: express.Request, res: express.Response) => {
 
 })
 
+router.get("/calendars", (req: express.Request, res: express.Response) => {
+    // Request timetree for the user calendars list
+    axios.get(API_URL + "/calendars", { 
+        headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${ACCESS_TOKEN}`
+        }
+    }).then(res => {
+        console.log(res.data)
+    }).catch(err => {
+        console.log(err)
+    })
+})
+
 router.get("/user", (req: express.Request, res: express.Response) => {
     // Request timetree api to retrieve user data
     axios.get(API_URL + "/user", {
