@@ -1,5 +1,6 @@
 import express from "express";
 import dotenv from "dotenv";
+import cors from "cors"
 
 // Enable .env variables
 dotenv.config();
@@ -13,6 +14,7 @@ const app = express();
 // Add middlewares to express app
 app.use(express.json())
    .use(express.urlencoded({ extended: false }))
+   .use(cors())
 
 
 // App listening on .env port
